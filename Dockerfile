@@ -15,12 +15,16 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN bun run build
 
-# Serve with Bun
+# Run the Nitro server
 FROM base AS runner
 WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY serve.ts .
+
+COPY --from=builder /app/.output ./.output
+
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=4040
 
 EXPOSE 4040
 
-CMD ["bun", "run", "serve.ts"]
+CMD ["bun", ".output/server/index.mjs"]
