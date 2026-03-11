@@ -8,14 +8,14 @@ function App() {
   return (
     <main className="page-wrap px-4 pb-8 pt-14">
       <section>
-        <div className="mt-32 flex flex-1 justify-center">
+        <div className="mt-16 sm:mt-32 flex flex-1 justify-center">
           <Hero />
         </div>
       </section>
 
-      <hr className="mt-80 text-neutral-300/20"></hr>
+      <hr className="mt-32 sm:mt-80 text-neutral-300/20"></hr>
 
-      <section className="mt-40">
+      <section className="mt-16 sm:mt-40">
         <div className="flex flex-1 justify-center">
           <CTA />
         </div>

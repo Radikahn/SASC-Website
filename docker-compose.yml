@@ -1,0 +1,7 @@
+services:
+  actuary_sjsu:
+    build: .
+    container_name: actuary
+    ports:
+      - '4040:4040'
+    restart: unless-stopped
