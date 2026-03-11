@@ -1,14 +1,14 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 
-function LazyGif({
+function LazyVideo({
   src,
   className,
 }: {
   src: string
   className: string
 }) {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
@@ -20,13 +20,17 @@ function LazyGif({
       transition={{ duration: 0.7, ease: 'easeOut' }}
       className="w-full max-w-[800px] px-4 sm:px-0"
     >
-      <img
-        className={className}
-        src={isInView ? src : undefined}
-        width={800}
-        height={800}
-        style={{ width: '100%', height: 'auto' }}
-      />
+      {isInView && (
+        <video
+          className={className}
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ width: '100%', height: 'auto' }}
+        />
+      )}
     </motion.div>
   )
 }
@@ -39,9 +43,9 @@ export default function WalterHero() {
           id="walter-demo"
           className="flex flex-col items-center justify-center"
         >
-          <LazyGif
+          <LazyVideo
             className="rounded-2xl sm:rounded-4xl border border-neutral-100/20 hover:border-yellow-200/40 transition-all duration-500"
-            src="assets/openWalter.gif"
+            src="assets/openWalter.mp4"
           />
         </div>
 
@@ -70,9 +74,9 @@ export default function WalterHero() {
           id="walter-question"
           className="flex flex-col items-center justify-center"
         >
-          <LazyGif
+          <LazyVideo
             className="rounded-2xl sm:rounded-4xl border border-neutral-100/20 hover:border-yellow-200/40 transition-all duration-500"
-            src="assets/questionSample.gif"
+            src="assets/questionSample.mp4"
           />
         </div>
 
