@@ -1,20 +1,20 @@
 services:
-    
-     image: postgres
-     restart: always
-     volumes:
-         type: tmpfs
-         target: ./container
-               
-     environment:
-         POSTGRES_DB: sasc_db
-         POSTGRES_USER: farns
-         POSTGRES_PASSWORD: bobis333
-     
-     adminer:
-          image: adminer
-          restart: always
-          ports:
-              - 8080:8080
-    
+    db:
+        image: postgres
+        restart: always
+        volumes:
+            type: tmpfs
+            target: ./container
+                
+        environment:
+            POSTGRES_DB: sasc_db
+            POSTGRES_USER: farns
+            POSTGRES_PASSWORD: bobis333
+        
+        adminer:
+            image: adminer
+            restart: always
+            ports:
+                - 8080:8080
+        
     
