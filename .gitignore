@@ -14,3 +14,6 @@ todos.json
 .python-version
 .venv/
 *.lock
+exam_db.sqlite
+postgres_data
+__pycache__
