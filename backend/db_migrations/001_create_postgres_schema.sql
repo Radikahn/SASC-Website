@@ -31,8 +31,7 @@ CREATE TABLE IF NOT EXISTS users (
   discord_id TEXT UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   stat_decay BOOLEAN NOT NULL DEFAULT TRUE,
-  decay_time decay_time_enum NOT NULL DEFAULT 'biweekly',
-  overall_elo NUMERIC(4, 2) NOT NULL DEFAULT 0 CHECK (overall_elo >= 0 AND overall_elo <= 10)
+  decay_time decay_time_enum NOT NULL DEFAULT 'biweekly'
 );
 
 -- migrate:statement

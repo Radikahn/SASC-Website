@@ -1,12 +1,12 @@
 services:
   db:
-    image: postgres:18
+    image: postgres
     restart: always
     ports:
       - 5432:5432
     volumes:
       - type: bind
-        target: /var/lib/postgresql/data
+        target: /var/lib/postgresql
         source: ./postgres_data
 
     environment:

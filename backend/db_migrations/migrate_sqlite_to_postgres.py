@@ -136,6 +136,7 @@ def ensure_target_is_empty(target_conn: Connection) -> None:
         "exams",
         "topics",
         "questions",
+        "user_exam_ratings",
         "question_attempts",
         "practice_exams",
     ]
@@ -198,8 +199,8 @@ def migrate_users(source_conn: Connection, target_conn: Connection) -> dict[int,
         new_user_id = target_conn.execute(
             text(
                 """
-                INSERT INTO users (discord_id, created_at, stat_decay, decay_time, overall_elo)
-                VALUES (:discord_id, :created_at, :stat_decay, :decay_time, :overall_elo)
+                INSERT INTO users (discord_id, created_at, stat_decay, decay_time)
+                VALUES (:discord_id, :created_at, :stat_decay, :decay_time)
                 RETURNING id
                 """
             ),
@@ -208,11 +209,34 @@ def migrate_users(source_conn: Connection, target_conn: Connection) -> dict[int,
                 "created_at": parse_timestamp(row["created_at"]),
                 "stat_decay": bool(row["stat_decay"]),
                 "decay_time": normalize_decay_time(row.get("decay_time")),
-                "overall_elo": 0,
             },
         ).scalar_one()
         user_ids[legacy_user_id] = new_user_id
     return user_ids
+
+
+def seed_user_exam_ratings(
+    target_conn: Connection, user_ids: dict[int, int], exam_ids: dict[str, int]
+) -> None:
+    payload = [
+        {"user_id": new_user_id, "exam_id": exam_id, "elo": 0}
+        for new_user_id in user_ids.values()
+        for exam_id in exam_ids.values()
+    ]
+
+    if not payload:
+        return
+
+    target_conn.execute(
+        text(
+            """
+            INSERT INTO user_exam_ratings (user_id, exam_id, elo)
+            VALUES (:user_id, :exam_id, :elo)
+            ON CONFLICT (user_id, exam_id) DO NOTHING
+            """
+        ),
+        payload,
+    )
 
 
 def migrate_questions(
@@ -462,6 +486,9 @@ def main() -> None:
 
         print("Migrating users ...")
         user_ids = migrate_users(source_conn, target_conn)
+
+        print("Seeding per-exam user ratings ...")
+        seed_user_exam_ratings(target_conn, user_ids, exam_ids)
 
         print("Migrating questions ...")
         question_ids = migrate_questions(source_conn, target_conn, exam_ids)
