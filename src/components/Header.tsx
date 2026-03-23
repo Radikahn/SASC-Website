@@ -10,6 +10,10 @@ export default function Header() {
   const goToWalter = () => {
     nav({ to: '/walter' })
   }
+
+  const goToActex = () => {
+    nav({ to: '/actex' })
+  }
   return (
     <header className="flex flex-1 justify-items-center sticky top-0 z-50 h-16 sm:h-20 border-b border-[var(--line)] bg-[var(--header-bg)] px-4 backdrop-blur-lg">
       <div className="flex flex-1 justify-between items-center">
@@ -24,13 +28,25 @@ export default function Header() {
             </span>
           </span>
         </div>
-        <div id="nav-items" className="flex flex-row gap-4 sm:gap-6 shrink-0">
+        <div
+          id="nav-items"
+          className="flex flex-row gap-4 sm:gap-6 shrink-0 mr-8"
+        >
           <span className="space-x-4 font-normal text-sm sm:text-lg">
             <span
               className="cursor-pointer hover:text-amber-300 transition-all duration-600"
               onClick={goToHome}
             >
               Home
+            </span>
+          </span>
+
+          <span className="font-normal text-sm sm:text-lg">
+            <span
+              className="cursor-pointer hover:text-amber-300 transition-all duration-600"
+              onClick={goToActex}
+            >
+              Actex
             </span>
           </span>
           <span className="font-normal text-sm sm:text-lg">

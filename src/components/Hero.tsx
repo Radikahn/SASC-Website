@@ -1,5 +1,3 @@
-import { useNavigate } from '@tanstack/react-router'
-
 export default function Hero() {
   const handleDiscord = () => {
     window.open('https://discord.gg/fQxkYq8Tc7')

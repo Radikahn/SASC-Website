@@ -192,7 +192,15 @@ pre code {
 
 .feature-card:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in oklab, var(--lagoon-deep) 35%, var(--line));
+}
+
+.promo-btn {
+  box-shadow: 0 25px 50px -12px transparent;
+  transition: box-shadow 1000ms ease, background-color 200ms ease, transform 100ms ease;
+}
+
+.promo-btn:hover {
+  box-shadow: 0 25px 50px -12px rgba(252, 211, 77, 0.2);
 }
 
 button,
