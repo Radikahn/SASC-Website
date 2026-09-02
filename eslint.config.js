@@ -15,6 +15,16 @@ export default [
     },
   },
   {
-    ignores: ['eslint.config.js', 'prettier.config.js'],
+    ignores: [
+      'eslint.config.js',
+      'prettier.config.js',
+      // build output — gitignored, not source
+      '.output/**',
+      '.nitro/**',
+      '.tanstack/**',
+      '.vinxi/**',
+      'dist/**',
+      'dist-ssr/**',
+    ],
   },
 ]

@@ -1,3 +1,14 @@
+# Central stack definition for the SäSC site. Single entry point:
+#
+#   docker compose up -d --build     build and start
+#   docker compose down              stop and remove
+#   docker compose logs -f           tail logs
+#
+# This replaces the old `just rebuild` (down && docker rmi && up), which only
+# existed to force a fresh image. `pull_policy: build` does that declaratively.
+#
+# The `website-internal` network must already exist on the host:
+#   docker network create website-internal
 name: actuary
 
 services:
@@ -7,11 +18,17 @@ services:
       dockerfile: Dockerfile
       target: runner
     # Never pull from a registry, and never reuse a stale local image:
-    # every `up` rebuilds from the Dockerfile. This is what replaces the
-    # old `just rebuild` (down && docker rmi && up) dance.
+    # every `up` rebuilds from the Dockerfile.
     pull_policy: build
+    # Pinned so the image name does not drift with the project or directory
+    # name. This is the name the old Justfile's `docker rmi` targeted.
     image: actuary-actuary_sjsu
+    # DO NOT RENAME. nginx reaches this stack at exactly one place:
+    #   location / { proxy_pass http://actuary:4040; }
+    # which resolves this container by name over website-internal.
     container_name: actuary
+    networks:
+      - website-internal
     ports:
       - '4040:4040'
     environment:
@@ -25,3 +42,9 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
+
+networks:
+  # Shared reverse-proxy network, created out of band and also used by the
+  # saec and shop_saec stacks. Compose will not create it.
+  website-internal:
+    external: true
